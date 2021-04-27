@@ -37,16 +37,15 @@ class WLCURL
     protected $query_url_para;
     protected $query_post_field;
     public $result;
+    public $info;
 
     //for check obj para
     protected $check_method = ['GET', 'POST', 'PUT', 'DELETE'];
     protected $check_para_type = ['http', 'json'];
 
-    public function __construct($method = 'GET')
+    public function __construct($base_url = null)
     {
-        $this->method = strtoupper($method);
-        $this->opt[CURLOPT_CUSTOMREQUEST] = $this->method;
-        $this->check_method();
+        $this->base_url = $base_url ?? $this->base_url;
         if (!empty(env('WLCURL_BASE_URL'))) {
             $this->base_url = env('WLCURL_BASE_URL');
         }
@@ -125,6 +124,7 @@ class WLCURL
         $this->build_post_field();
         $this->set_opt();
         $this->result = curl_exec($this->curl);
+        $this->info = curl_getinfo($this->curl);
         curl_close($this->curl);
         //$this->result = $decode ? json_decode($this->result, $type) : $this->result;
         return $this;
@@ -292,13 +292,18 @@ class WLCURL
     {
         $this->para_type = $type;
         $this->check_para_type();
+        switch ($type) {
+            case 'http':
+                break; // do nothing
+            case 'json':
+                $this->header('Content-Type', 'application/json');
+                break;
+        }
         return $this;
     }
 
-    public function test(...$test)
+    public function getdecodebody(bool|null $associative = null , int $depth = 512 , int $flags = 0 )
     {
-        $this->build_header();
-        return $this;
-        dd(func_get_args());
+        return json_decode($this->result, $associative, $depth, $flags);
     }
 }
