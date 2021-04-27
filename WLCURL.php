@@ -120,6 +120,7 @@ class WLCURL
         $this->build_end_point();
         $this->build_url_para();
         $this->build_url();
+        $this->build_token(); // must build before build header, because token need set in header
         $this->build_header(); // prepare header and set header and prepare to opt
         $this->build_post_field();
         $this->set_opt();
@@ -167,6 +168,7 @@ class WLCURL
         $this->check_method();
         $this->opt[CURLOPT_CUSTOMREQUEST] = $this->method;
         $this->opt[CURLOPT_URL] = $this->query_url;
+        $this->opt[CURLOPT_POSTFIELDS] = $this->query_post_field;
         curl_setopt_array($this->curl, $this->opt);
     }
 
@@ -174,6 +176,11 @@ class WLCURL
     {
         $this->token_type = $type ? $type : $this->token_type;
         $this->token = $token;
+        return $this;
+    }
+
+    protected function build_token()
+    {
         return $this->header('Authorization', $this->token_type . ' ' . $this->token);
     }
 
