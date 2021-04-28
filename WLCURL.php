@@ -223,13 +223,14 @@ class WLCURL
 
     public function end_point(string $end_point = '', bool $is_add = false)
     {
-        if($is_add) $this->end_point .= $end_point;
-        else $this->end_point = $end_point;
+        if($is_add) $this->end_point .= (string) $end_point;
+        else $this->end_point = (string) $end_point;
         return $this;
     }
 
     protected function build_end_point()
     {
+        $this->check_end_point();
         $this->query_end_point = $this->end_point;
     }
 
