@@ -36,12 +36,25 @@ class WLCURL
     protected $query_end_point;
     protected $query_url_para;
     protected $query_post_field;
-    public $result;
-    public $info;
+
+    //result
+    protected $Body;
+    protected $info;
+    protected $error;
 
     //for check obj para
     protected $check_method = ['GET', 'POST', 'PUT', 'DELETE'];
     protected $check_para_type = ['http', 'json'];
+    protected $check_multiple_para = [
+        'base_url',
+        'header',
+        'opt',
+        'end_point',
+        'token',
+        'url_para',
+        'post_field',
+        'para_type',
+    ];
 
     public function __construct($base_url = null)
     {
@@ -63,7 +76,7 @@ class WLCURL
     {
         try {
             if (!in_array(strtoupper($this->method), $this->check_method)) {
-                throw new \Exception('CURL method error,only accept [' . implode(', ', $this->check_method) . '], please check and try again.');
+                throw new \Exception('WLCURL method error,only accept [' . implode(', ', $this->check_method) . '], please check and try again.');
             }
         } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -75,7 +88,7 @@ class WLCURL
     {
         try {
             if (!in_array($this->para_type, $this->check_para_type)) {
-                throw new \Exception('CURL query type error,only accept [' . implode(', ', $this->check_para_type) . '], please check and try again.');
+                throw new \Exception('WLCURL query type error,only accept [' . implode(', ', $this->check_para_type) . '], please check and try again.');
             }
         } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -87,7 +100,7 @@ class WLCURL
     {
         try {
             if (!is_array($para)) {
-                throw new \Exception('CURL query para error, url or post field, type must be array, please check and try again.');
+                throw new \Exception('WLCURL query para error, url or post field, type must be array, please check and try again.');
             }
         } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -99,7 +112,7 @@ class WLCURL
     {
         try {
             if (!is_numeric($this->encode_depth)) {
-                throw new \Exception('CURL encode depth error, type must be numeric, please check and try again.');
+                throw new \Exception('WLCURL encode depth error, type must be numeric, please check and try again.');
             }
         } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -123,10 +136,17 @@ class WLCURL
         $this->build_header(); // prepare header and set header and prepare to opt
         $this->build_post_field();
         $this->set_opt();
-        $this->result = curl_exec($this->curl);
+        $this->Body = curl_exec($this->curl);
         $this->info = curl_getinfo($this->curl);
+        $this->error = curl_error($this->curl);
         curl_close($this->curl);
         //$this->result = $decode ? json_decode($this->result, $type) : $this->result;
+        return $this;
+    }
+
+    public function base_url(string $base_url = '')
+    {
+        $this->base_url = $base_url;
         return $this;
     }
 
@@ -150,6 +170,11 @@ class WLCURL
         $this->opt[CURLOPT_HTTPHEADER] = $this->query_header; //set header to opt
     }
 
+    /**
+     * referance : 
+     *      https://www.php.net/manual/en/function.curl-setopt.php
+     *      https://www.php.net/manual/en/function.curl-setopt-array.php
+     */
     public function opt($opt = [], $value = '') //put add
 
     {
@@ -166,7 +191,7 @@ class WLCURL
     protected function set_opt()
     {
         $this->check_method();
-        $this->opt[CURLOPT_CUSTOMREQUEST] = $this->method;
+        $this->opt[CURLOPT_CUSTOMREQUEST] = strtoupper($this->method);
         $this->opt[CURLOPT_URL] = $this->query_url;
         $this->opt[CURLOPT_POSTFIELDS] = $this->query_post_field;
         curl_setopt_array($this->curl, $this->opt);
@@ -302,12 +327,114 @@ class WLCURL
         return $this;
     }
 
-    public function getdecodebody(bool|null $associative = null , int $depth = 512 , int $flags = 0 )
-    {
-        return json_decode($this->result, $associative, $depth, $flags);
-    }
 
     
+
+    /**
+     *  Accept para
+     *  ---------------
+     *      base_url
+     *      header
+     *      opt
+     *      end_point
+     *      token
+     *      url_para
+     *      post_field
+     *      para_type
+     */
+    protected function check_multiple_para($multiple_para)
+    {
+        try {
+            $check_keys = array_keys($multiple_para);
+            foreach($check_keys as $value){
+                if(!in_array($value, $this->check_multiple_para)){
+                    throw new \Exception("WLCURL query para error, para [\"$value\"] not valid, key must be in [ " . implode(', ', $this->check_multiple_para) . " ], please check and try again.");
+                }
+            }
+        } catch (\Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            die;
+        }
+    }
+
+    protected function build_multiple_para($multiple_para)
+    {
+        $this->check_request_multiple_para($multiple_para);
+        foreach($multiple_para as $key => $value){
+            $this->{$key}($value);
+        }
+    }
+
+    /**
+     * request method -----------------
+     */
+
+
+    /**
+     * example-------------
+     *      $response = (new WLCURL)->request('POST', [
+     *          'base_url' => 'https://your.destination.url',
+     *          'end_point' => 'where/your/wanna/go',
+     *          'url_para' => [
+     *              'key' => 'value',
+     *          ],
+     *          'header' => [
+     *              'Content-Type' => 'application/json',
+     *              'Authorization' => 'Your token here',       
+     *          ]
+     *      ])->exe();
+     */
+    protected static function request(string $method = 'GET', array $multiple_para = [])
+    {
+        $self = new static;
+        if($method) $self->method = strtoupper($method);
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
+    protected static function get(array $multiple_para = [])
+    {
+        $self = new static;
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
+    protected static function post(array $multiple_para = [])
+    {
+        $self = new static;
+        $self->method = strtoupper(__FUNCTION__);
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
+    protected static function put(array $multiple_para = [])
+    {
+        $self = new static;
+        $self->method = strtoupper(__FUNCTION__);
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
+    protected static function delete(array $multiple_para = [])
+    {
+        $self = new static;
+        $self->method = strtoupper(__FUNCTION__);
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
+
+    /**
+     * after exe 
+     */
+    public function getBody()
+    {
+
+    }
+    public function getdecodebody(bool|null $associative = null , int $depth = 512 , int $flags = 0 )
+    {
+        return json_decode($this->Body, $associative, $depth, $flags);
+    }
 
     /**
      *   accept target para
@@ -426,7 +553,13 @@ class WLCURL
     {
         $this->check_http_code(__FUNCTION__);
         return substr($this->info['http_code'], 0, 1) == 5 ? true : false;
-    }
+    } 
 
-    
+    /**
+     * referance : https://www.php.net/manual/en/function.curl-error.php
+     */
+    protected function get_error_msg()
+    {
+        return $this->error;
+    }
 }
