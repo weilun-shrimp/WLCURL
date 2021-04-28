@@ -96,18 +96,6 @@ class WLCURL
         }
     }
 
-    protected function check_end_point()
-    {
-        try {
-            if (!is_array($this->end_point)) {
-                throw new \Exception('WLCURL end point error, must be array, please check and try again.');
-            }
-        } catch (\Exception $e) {
-            echo 'Caught exception: ', $e->getMessage(), "\n";
-            die;
-        }
-    }
-
     protected function check_http_query_para($para)
     {
         try {
@@ -221,28 +209,57 @@ class WLCURL
         return $this->header('Authorization', $this->token_type . ' ' . $this->token);
     }
 
-    public function end_point(...$end_point)
+    protected function check_end_point()
     {
-        $pre = func_get_args();
-        if (!empty($pre)) {
-            $to = is_array($pre[0]) ? $pre[0] : array_filter(explode('/', $pre[0])); // array_filter => filter not valid value, like null, 0, false
-            foreach ($to as $value) {
-                $this->end_point[] = $value;
+        try {
+            if (!is_array($this->end_point)) {
+                throw new \Exception('WLCURL end point error, must be array, please check and try again.');
             }
+        } catch (\Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            die;
         }
+    }
+
+    public function end_point(string $end_point = '', bool $is_add = false)
+    {
+        if($is_add) $this->end_point .= $end_point;
+        else $this->end_point = $end_point;
         return $this;
     }
 
     protected function build_end_point()
     {
-        $this->query_end_point = implode('/', $this->end_point);
+        $this->query_end_point = $this->end_point;
     }
+
+    /**
+     * Because some frame work has uniqe rule to format api request url
+     * example : Django -> if request method is post , every endpoint end need add "/"
+     * if use this method will cause error, so I command this method 
+     */
+    // public function end_point(...$end_point)
+    // {
+    //     $pre = func_get_args();
+    //     if (!empty($pre)) {
+    //         $to = is_array($pre[0]) ? $pre[0] : array_filter(explode('/', $pre[0])); // array_filter => filter not valid value, like null, 0, false
+    //         foreach ($to as $value) {
+    //             $this->end_point[] = $value;
+    //         }
+    //     }
+    //     return $this;
+    // }
+
+    // protected function build_end_point()
+    // {
+    //     $this->query_end_point = implode('/', $this->end_point);
+    // }
 
     protected function build_url()
     {
         $this->query_url = $this->base_url;
         if (!empty($this->query_end_point)) {
-            $this->query_url .= '/' . $this->query_end_point;
+            $this->query_url .= $this->query_end_point;
         }
         if (!empty($this->query_url_para)) {
             $this->query_url .= '?' . $this->query_url_para;
