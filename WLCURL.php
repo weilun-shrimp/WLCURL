@@ -362,7 +362,7 @@ class WLCURL
 
     protected function build_multiple_para($multiple_para)
     {
-        $this->check_request_multiple_para($multiple_para);
+        $this->check_multiple_para($multiple_para);
         foreach($multiple_para as $key => $value){
             $this->{$key}($value);
         }
