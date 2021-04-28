@@ -387,7 +387,7 @@ class WLCURL
      *          ]
      *      ])->exe();
      */
-    protected static function request(string $method = 'GET', array $multiple_para = [])
+    public static function request(string $method = 'GET', array $multiple_para = [])
     {
         $self = new static;
         if($method) $self->method = strtoupper($method);
@@ -395,22 +395,14 @@ class WLCURL
         return $self;
     }
 
-    protected static function get(array $multiple_para = [])
+    public static function get(array $multiple_para = [])
     {
         $self = new static;
         $self->build_multiple_para($multiple_para);
         return $self;
     }
 
-    protected static function post(array $multiple_para = [])
-    {
-        $self = new static;
-        $self->method = strtoupper(__FUNCTION__);
-        $self->build_multiple_para($multiple_para);
-        return $self;
-    }
-
-    protected static function put(array $multiple_para = [])
+    public static function post(array $multiple_para = [])
     {
         $self = new static;
         $self->method = strtoupper(__FUNCTION__);
@@ -418,7 +410,15 @@ class WLCURL
         return $self;
     }
 
-    protected static function delete(array $multiple_para = [])
+    public static function put(array $multiple_para = [])
+    {
+        $self = new static;
+        $self->method = strtoupper(__FUNCTION__);
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
+    public static function delete(array $multiple_para = [])
     {
         $self = new static;
         $self->method = strtoupper(__FUNCTION__);
