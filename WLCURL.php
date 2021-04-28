@@ -463,6 +463,7 @@ class WLCURL
     {
 
     }
+    
     /**
      * accept para type
      * -----------------
@@ -470,7 +471,7 @@ class WLCURL
      *      $depth          int
      *      $flags          int
      */
-    public function getdecodebody($associative = null , int $depth = 512 , int $flags = 0 )
+    public function getdecodeBody($associative = null , int $depth = 512 , int $flags = 0 )
     {
         return json_decode($this->Body, $associative, $depth, $flags);
     }
