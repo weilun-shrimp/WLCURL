@@ -125,8 +125,8 @@ class WLCURL
         //check first
         $this->check_method();
         $this->check_para_type();
-        $this->check_url_para($this->url_para);
-        $this->check_url_para($this->post_field);
+        $this->check_http_query_para($this->url_para);
+        $this->check_http_query_para($this->post_field);
 
         $this->curl = curl_init(); // init curl
         $this->build_end_point();
