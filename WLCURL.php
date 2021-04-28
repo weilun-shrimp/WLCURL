@@ -107,7 +107,7 @@ class WLCURL
         }
     }
 
-    public function exe($decode = true, $type = false)
+    public function exe()
     {
         //check first
         $this->check_method();
@@ -306,4 +306,127 @@ class WLCURL
     {
         return json_decode($this->result, $associative, $depth, $flags);
     }
+
+    
+
+    /**
+     *   accept target para
+     *   -------------------
+     *      url
+     *      content_type 
+     *      http_code 
+     *      header_size 
+     *      request_size 
+     *      filetime 
+     *      ssl_verify_result 
+     *      redirect_count 
+     *      total_time 
+     *      namelookup_time 
+     *      connect_time 
+     *      pretransfer_time 
+     *      size_upload 
+     *      size_download 
+     *      speed_download 
+     *      speed_upload 
+     *      download_content_length 
+     *      upload_content_length 
+     *      starttransfer_time 
+     *      redirect_time 
+     *      redirect_url 
+     *      primary_ip 
+     *      certinfo 
+     *      primary_port 
+     *      local_ip 
+     *      local_port 
+     *      http_version 
+     *      protocol 
+     *      ssl_verifyresult 
+     *      scheme 
+     *      appconnect_time_us 
+     *      connect_time_us 
+     *      namelookup_time_us 
+     *      pretransfer_time_us 
+     *      redirect_time_us 
+     *      starttransfer_time_us 
+     *      total_time_us 
+     */
+    protected function get_info($target = null)
+    {
+        if($target) return $this->info[$target];
+        else return $this->info;
+    }
+
+    /**
+     *  Http status code
+     */
+    protected function check_http_code(string $function_name = '')
+    {
+        try {
+            if (!isset($this->info['http_code'])) {
+                throw new \Exception("Http code not declare, function $function_name must called after request(exe) CURL, please check and try again.");
+            }
+        } catch (\Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            die;
+        }
+    }
+
+    protected function get_Http_code()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return $this->info['http_code'];
+    }
+
+    /**
+     *  Http status code check method
+     */
+    protected function is_error()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return (substr($this->info['http_code'], 0, 1) == 4 || substr($this->info['http_code'], 0, 1) == 5) ? true : false;
+    }
+
+    /**
+     *  clien error
+     */
+    protected function is_clien_error()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return substr($this->info['http_code'], 0, 1) == 4 ? true : false;
+    }
+
+    protected function is_bad_request()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return $this->info['http_code'] == 400 ? true : false;
+    }
+
+    protected function is_unauthorized()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return $this->info['http_code'] == 401 ? true : false;
+    }
+
+    protected function is_forbidden()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return $this->info['http_code'] == 403 ? true : false;
+    }
+
+    protected function is_method_not_allow()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return $this->info['http_code'] == 405 ? true : false;
+    }
+
+    /**
+     *  server error
+     */
+    protected function is_server_error()
+    {
+        $this->check_http_code(__FUNCTION__);
+        return substr($this->info['http_code'], 0, 1) == 5 ? true : false;
+    }
+
+    
 }
