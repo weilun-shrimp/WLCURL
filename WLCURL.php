@@ -212,8 +212,8 @@ class WLCURL
     protected function check_end_point()
     {
         try {
-            if (!is_array($this->end_point)) {
-                throw new \Exception('WLCURL end point error, must be array, please check and try again.');
+            if (!is_string($this->end_point)) {
+                throw new \Exception('WLCURL end point error, must be string, please check and try again.');
             }
         } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -463,7 +463,7 @@ class WLCURL
     {
 
     }
-    
+
     /**
      * accept para type
      * -----------------
