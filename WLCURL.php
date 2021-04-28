@@ -262,6 +262,9 @@ class WLCURL
         return $this;
     }
 
+    /**
+     * referance : https://www.php.net/manual/en/function.json-encode.php
+     */
     public function encode($flag = JSON_UNESCAPED_UNICODE, $depth = 512)
     {
         $this->encode_flag = $flag;
@@ -431,7 +434,14 @@ class WLCURL
     {
 
     }
-    public function getdecodebody(bool|null $associative = null , int $depth = 512 , int $flags = 0 )
+    /**
+     * accept para type
+     * -----------------
+     *      $associative    bool|null
+     *      $depth          int
+     *      $flags          int
+     */
+    public function getdecodebody($associative = null , int $depth = 512 , int $flags = 0 )
     {
         return json_decode($this->Body, $associative, $depth, $flags);
     }
