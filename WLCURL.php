@@ -7,7 +7,7 @@ class WLCURL
     public $curl;
 
     public $base_url;
-    public $end_point;
+    public $end_point = [];
     public $url_para = [];
     public $method = 'GET';
     public $opt = [
@@ -89,6 +89,18 @@ class WLCURL
         try {
             if (!in_array($this->para_type, $this->check_para_type)) {
                 throw new \Exception('WLCURL query type error,only accept [' . implode(', ', $this->check_para_type) . '], please check and try again.');
+            }
+        } catch (\Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            die;
+        }
+    }
+
+    protected function check_end_point()
+    {
+        try {
+            if (!is_array($this->end_point)) {
+                throw new \Exception('WLCURL end point error, must be array, please check and try again.');
             }
         } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
