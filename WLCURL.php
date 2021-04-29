@@ -462,7 +462,7 @@ class WLCURL
      */
     public function getBody()
     {
-
+        return $this->Body;
     }
 
     /**
@@ -518,7 +518,7 @@ class WLCURL
      *      starttransfer_time_us 
      *      total_time_us 
      */
-    protected function get_info($target = null)
+    public function get_info($target = null)
     {
         if($target) return $this->info[$target];
         else return $this->info;
@@ -527,7 +527,7 @@ class WLCURL
     /**
      *  Http status code
      */
-    protected function check_http_code(string $function_name = '')
+    public function check_http_code(string $function_name = '')
     {
         try {
             if (!isset($this->info['http_code'])) {
@@ -539,7 +539,7 @@ class WLCURL
         }
     }
 
-    protected function get_Http_code()
+    public function get_Http_code()
     {
         $this->check_http_code(__FUNCTION__);
         return $this->info['http_code'];
@@ -548,7 +548,7 @@ class WLCURL
     /**
      *  Http status code check method
      */
-    protected function is_error()
+    public function is_error()
     {
         $this->check_http_code(__FUNCTION__);
         return (substr($this->info['http_code'], 0, 1) == 4 || substr($this->info['http_code'], 0, 1) == 5) ? true : false;
@@ -557,31 +557,31 @@ class WLCURL
     /**
      *  clien error
      */
-    protected function is_clien_error()
+    public function is_clien_error()
     {
         $this->check_http_code(__FUNCTION__);
         return substr($this->info['http_code'], 0, 1) == 4 ? true : false;
     }
 
-    protected function is_bad_request()
+    public function is_bad_request()
     {
         $this->check_http_code(__FUNCTION__);
         return $this->info['http_code'] == 400 ? true : false;
     }
 
-    protected function is_unauthorized()
+    public function is_unauthorized()
     {
         $this->check_http_code(__FUNCTION__);
         return $this->info['http_code'] == 401 ? true : false;
     }
 
-    protected function is_forbidden()
+    public function is_forbidden()
     {
         $this->check_http_code(__FUNCTION__);
         return $this->info['http_code'] == 403 ? true : false;
     }
 
-    protected function is_method_not_allow()
+    public function is_method_not_allow()
     {
         $this->check_http_code(__FUNCTION__);
         return $this->info['http_code'] == 405 ? true : false;
@@ -590,7 +590,7 @@ class WLCURL
     /**
      *  server error
      */
-    protected function is_server_error()
+    public function is_server_error()
     {
         $this->check_http_code(__FUNCTION__);
         return substr($this->info['http_code'], 0, 1) == 5 ? true : false;
@@ -599,7 +599,7 @@ class WLCURL
     /**
      * referance : https://www.php.net/manual/en/function.curl-error.php
      */
-    protected function get_error_msg()
+    public function get_error_msg()
     {
         return $this->error;
     }
