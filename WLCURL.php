@@ -338,7 +338,7 @@ class WLCURL
             if (!is_array($value)) {
                 $result[] = $pre_word . "[$key]=$value";
             } else {
-                foreach ($this->build_url_para_word($value, $pre_word . "[$key]") as $word) {
+                foreach ($this->build_query_para_word($value, $pre_word . "[$key]") as $word) {
                     $result[] .= $word;
                 }
             }
