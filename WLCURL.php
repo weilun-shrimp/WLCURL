@@ -7,7 +7,7 @@ class WLCURL
     public $curl;
 
     public $base_url;
-    public $end_point = [];
+    public $end_point = '';
     public $url_para = [];
     public $method = 'GET';
     public $opt = [
