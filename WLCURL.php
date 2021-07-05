@@ -2,6 +2,13 @@
 
 namespace App\Models\WLCURL;
 
+/** 
+ * @brief Let PHP Api request more easy, all is open source in my github, just take it, and use it well
+ * 
+ * @source https://github.com/weilun-shrimp/WLCURL
+ * @author WeiLun
+ * @date 2021-07-06
+ */
 class WLCURL
 {
     public $curl;
@@ -223,7 +230,7 @@ class WLCURL
 
     public function end_point(string $end_point = '', bool $is_add = false)
     {
-        if($is_add) $this->end_point .= (string) $end_point;
+        if ($is_add) $this->end_point .= (string) $end_point;
         else $this->end_point = (string) $end_point;
         return $this;
     }
@@ -361,7 +368,7 @@ class WLCURL
     }
 
 
-    
+
 
     /**
      *  Accept para
@@ -379,8 +386,8 @@ class WLCURL
     {
         try {
             $check_keys = array_keys($multiple_para);
-            foreach($check_keys as $value){
-                if(!in_array($value, $this->check_multiple_para)){
+            foreach ($check_keys as $value) {
+                if (!in_array($value, $this->check_multiple_para)) {
                     throw new \Exception("WLCURL query para error, para [\"$value\"] not valid, key must be in [ " . implode(', ', $this->check_multiple_para) . " ], please check and try again.");
                 }
             }
@@ -393,7 +400,7 @@ class WLCURL
     protected function build_multiple_para($multiple_para)
     {
         $this->check_multiple_para($multiple_para);
-        foreach($multiple_para as $key => $value){
+        foreach ($multiple_para as $key => $value) {
             $this->{$key}($value);
         }
     }
@@ -420,7 +427,7 @@ class WLCURL
     public static function request(string $method = 'GET', array $multiple_para = [])
     {
         $self = new static;
-        if($method) $self->method = strtoupper($method);
+        if ($method) $self->method = strtoupper($method);
         $self->build_multiple_para($multiple_para);
         return $self;
     }
@@ -472,7 +479,7 @@ class WLCURL
      *      $depth          int
      *      $flags          int
      */
-    public function getdecodeBody($associative = null , int $depth = 512 , int $flags = 0 )
+    public function getdecodeBody($associative = null, int $depth = 512, int $flags = 0)
     {
         return json_decode($this->Body, $associative, $depth, $flags);
     }
@@ -520,7 +527,7 @@ class WLCURL
      */
     public function get_info($target = null)
     {
-        if($target) return $this->info[$target];
+        if ($target) return $this->info[$target];
         else return $this->info;
     }
 
@@ -594,7 +601,7 @@ class WLCURL
     {
         $this->check_http_code(__FUNCTION__);
         return substr($this->info['http_code'], 0, 1) == 5 ? true : false;
-    } 
+    }
 
     /**
      * referance : https://www.php.net/manual/en/function.curl-error.php
