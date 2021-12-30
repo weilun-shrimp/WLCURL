@@ -25,7 +25,7 @@ class WLCURL
         CURLOPT_TIMEOUT => 10,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     ];
-    public $post_field = [];
+    public $body = [];
 
     public $header = [];
     protected $token_type = 'Bearer';
@@ -42,7 +42,7 @@ class WLCURL
     protected $query_url;
     protected $query_end_point;
     protected $query_url_para;
-    protected $query_post_field;
+    protected $query_body;
 
     //result
     protected $Body;
@@ -59,7 +59,7 @@ class WLCURL
         'end_point',
         'token',
         'url_para',
-        'post_field',
+        'body',
         'para_type',
     ];
 
@@ -133,7 +133,7 @@ class WLCURL
         $this->check_method();
         $this->check_para_type();
         $this->check_http_query_para($this->url_para);
-        $this->check_http_query_para($this->post_field);
+        $this->check_http_query_para($this->body);
 
         $this->curl = curl_init(); // init curl
         $this->build_end_point();
@@ -141,7 +141,7 @@ class WLCURL
         $this->build_url();
         $this->build_token(); // must build before build header, because token need set in header
         $this->build_header(); // prepare header and set header and prepare to opt
-        $this->build_post_field();
+        $this->build_body();
         $this->set_opt();
         $this->Body = curl_exec($this->curl);
         $this->info = curl_getinfo($this->curl);
@@ -200,7 +200,7 @@ class WLCURL
         $this->check_method();
         $this->opt[CURLOPT_CUSTOMREQUEST] = strtoupper($this->method);
         $this->opt[CURLOPT_URL] = $this->query_url;
-        $this->opt[CURLOPT_POSTFIELDS] = $this->query_post_field;
+        $this->opt[CURLOPT_POSTFIELDS] = $this->query_body;
         curl_setopt_array($this->curl, $this->opt);
     }
 
@@ -289,12 +289,12 @@ class WLCURL
         $this->query_url_para = $this->build_http_query_para($this->url_para); //same with implement php=>http_build_query() function
     }
 
-    public function post_field($para = [], $value = null)
+    public function body($para = [], $value = null)
     {
         if (is_array($para)) {
-            $this->post_field = $para;
+            $this->body = $para;
         } else {
-            $this->post_field[$para] = $value;
+            $this->body[$para] = $value;
         }
         return $this;
     }
@@ -310,14 +310,14 @@ class WLCURL
         return $this;
     }
 
-    protected function build_post_field()
+    protected function build_body()
     {
         switch ($this->para_type) {
             case 'http':
-                $this->query_post_field = $this->build_http_query_para($this->post_field); //same with implement php=>http_build_query() function
+                $this->query_body = $this->build_http_query_para($this->body); //same with implement php=>http_build_query() function
                 break;
             case 'json':
-                $this->query_post_field = json_encode($this->post_field, $this->encode_flag, $this->encode_depth);
+                $this->query_body = json_encode($this->body, $this->encode_flag, $this->encode_depth);
                 break;
         }
     }
@@ -379,7 +379,7 @@ class WLCURL
      *      end_point
      *      token
      *      url_para
-     *      post_field
+     *      body
      *      para_type
      */
     protected function check_multiple_para($multiple_para)
