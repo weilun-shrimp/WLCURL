@@ -1,0 +1,22 @@
+{
+    "name": "wlcurl/wlcurl",
+    "description": "Let PHP Api request more easy, everything is open source in my github, just take it, and use it well",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "WeiLun",
+            "email": "gxh0181160809rp@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/weilun-shrimp/WLCURL",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "WLCURL\\": "src/"
+        }
+    }
+}
