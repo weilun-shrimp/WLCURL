@@ -1,6 +1,6 @@
 <?php
 
-namespace WL;
+namespace WLCURL;
 
 /** 
  * @brief Let PHP Api request more easy, all is open source in my github, just take it, and use it well
