@@ -3,7 +3,7 @@
 namespace WLCURL;
 
 /** 
- * @brief Let PHP Api request more easy, all is open source in my github, just take it, and use it well
+ * @brief Let PHP Api (CURL) request more easyly、clearly and modelly, all is open source in my github, just take it, and use it well
  * 
  * @source https://github.com/weilun-shrimp/WLCURL
  * @author WeiLun
@@ -11,7 +11,7 @@ namespace WLCURL;
  */
 class WLCURL
 {
-    public $curl;
+    protected $curl;
 
     public $base_url;
     public $end_point = '';
@@ -28,15 +28,15 @@ class WLCURL
     public $body = [];
 
     public $header = [];
-    protected $token_type = 'Bearer';
-    protected $token;
+    public $token_type = 'Bearer';
+    public $token;
 
     /**
      * for api request
      */
-    protected $para_type = 'http';
-    protected $encode_flag = JSON_UNESCAPED_UNICODE;
-    protected $encode_depth = 512;
+    public $para_type = 'http';
+    public $encode_flag = JSON_UNESCAPED_UNICODE;
+    public $encode_depth = 512;
 
     protected $query_header = [];
     protected $query_url;
@@ -50,46 +50,43 @@ class WLCURL
     protected $error;
 
     //for check obj para
-    protected $check_method = ['GET', 'POST', 'PUT', 'DELETE'];
+    // protected $check_method = ['GET', 'POST', 'PUT', 'DELETE'];
     protected $check_para_type = ['http', 'json'];
     protected $check_multiple_para = [
+        'method',
         'base_url',
         'header',
         'opt',
         'end_point',
         'token',
+        'token_type',
         'url_para',
         'body',
         'para_type',
     ];
 
-    public function __construct($base_url = null)
+    public function __construct(array $multiple_para = [])
     {
-        $this->base_url = $base_url ?? $this->base_url;
-        if (!empty(env('WLCURL_BASE_URL'))) {
-            $this->base_url = env('WLCURL_BASE_URL');
-        }
-
-        if (!empty(env('WLCURL_DEFULT_TOKEN_TYPE'))) {
-            $this->token_type = env('WLCURL_DEFULT_TOKEN_TYPE');
-        }
-
-        if (!empty(env('WLCURL_DEFULT_TOKEN'))) {
-            $this->token = env('WLCURL_DEFULT_TOKEN');
-        }
+        if (!empty(env('WLCURL_BASE_URL'))) $this->base_url = env('WLCURL_BASE_URL');
+        if (!empty(env('WLCURL_DEFULT_TOKEN_TYPE'))) $this->token_type = env('WLCURL_DEFULT_TOKEN_TYPE');
+        if (!empty(env('WLCURL_DEFULT_TOKEN'))) $this->token = env('WLCURL_DEFULT_TOKEN');
+        if ($multiple_para) $this->build_multiple_para($multiple_para);
     }
 
-    protected function check_method()
-    {
-        try {
-            if (!in_array(strtoupper($this->method), $this->check_method)) {
-                throw new \Exception('WLCURL method error,only accept [' . implode(', ', $this->check_method) . '], please check and try again.');
-            }
-        } catch (\Exception $e) {
-            echo 'Caught exception: ', $e->getMessage(), "\n";
-            die;
-        }
-    }
+    /**
+     * Not use, user should can customize request method
+     */
+    // protected function check_method()
+    // {
+    //     try {
+    //         if (!in_array(strtoupper($this->method), $this->check_method)) {
+    //             throw new \Exception('WLCURL method error,only accept [' . implode(', ', $this->check_method) . '], please check and try again.');
+    //         }
+    //     } catch (\Exception $e) {
+    //         echo 'Caught exception: ', $e->getMessage(), "\n";
+    //         die;
+    //     }
+    // }
 
     protected function check_para_type()
     {
@@ -130,7 +127,7 @@ class WLCURL
     public function exe()
     {
         //check first
-        $this->check_method();
+        // $this->check_method();
         $this->check_para_type();
         $this->check_http_query_para($this->url_para);
         $this->check_http_query_para($this->body);
@@ -148,6 +145,12 @@ class WLCURL
         $this->error = curl_error($this->curl);
         curl_close($this->curl);
         //$this->result = $decode ? json_decode($this->result, $type) : $this->result;
+        return $this;
+    }
+
+    public function method(string $method = 'GET')
+    {
+        $this->method = $method;
         return $this;
     }
 
@@ -183,7 +186,6 @@ class WLCURL
      *      https://www.php.net/manual/en/function.curl-setopt-array.php
      */
     public function opt($opt = [], $value = '') //put add
-
     {
         if (is_array($opt)) {
             foreach ($opt as $key => $value) {
@@ -197,7 +199,7 @@ class WLCURL
 
     protected function set_opt()
     {
-        $this->check_method();
+        // $this->check_method();
         $this->opt[CURLOPT_CUSTOMREQUEST] = strtoupper($this->method);
         $this->opt[CURLOPT_URL] = $this->query_url;
         $this->opt[CURLOPT_POSTFIELDS] = $this->query_body;
@@ -208,6 +210,12 @@ class WLCURL
     {
         $this->token_type = $type ? $type : $this->token_type;
         $this->token = $token;
+        return $this;
+    }
+
+    public function token_type(string $token_type = 'Bearer')
+    {
+        $this->token_type = $token_type;
         return $this;
     }
 
@@ -353,7 +361,7 @@ class WLCURL
         return $result;
     }
 
-    public function para_type($type = 'http')
+    public function para_type(string $type = 'http')
     {
         $this->para_type = $type;
         $this->check_para_type();
