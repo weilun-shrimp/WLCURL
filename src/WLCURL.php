@@ -463,6 +463,14 @@ class WLCURL
         return $self;
     }
 
+    public static function patch(array $multiple_para = [])
+    {
+        $self = new static;
+        $self->method = strtoupper(__FUNCTION__);
+        $self->build_multiple_para($multiple_para);
+        return $self;
+    }
+
     public static function delete(array $multiple_para = [])
     {
         $self = new static;
