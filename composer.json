@@ -3,6 +3,7 @@
     "description": "Let PHP Api request more easy, everything is open source in my github, just take it, and use it well",
     "type": "library",
     "license": "MIT",
+    "version": "1.1",
     "authors": [
         {
             "name": "WeiLun",
