@@ -3,23 +3,37 @@
 Let PHP Api (CURL) request more easyly、clearly、liberty and modelly<br>
 讓 PHP Api (CURL) 請求更加簡單、清楚易懂、自由、模組化
 
--   [WLCURL](#wlcurl)
-    -   [Installation](#installation---安裝)
-    -   [Quick Example](#quick-example---快速範例)
-    -   [Construct](#construct---構成式)
-        -   [method](#method)
-        -   [basic_url](#basic_url)
-        -   [end_point](#end_point)
-        -   [url_para](#url_para)
-        -   [body](#body)
-        -   [header](#header)
-        -   [token](#token)
-            -   [token_type](#token_type)
-        -   [para_type](#para_type)
-        -   [opt](#opt)
-    -   [Execute](#execute---執行)
-        -   [exe](#exe)
-    -   [Error Handle](#error-handle---錯誤處理)
+*   [WLCURL](#wlcurl)
+    *   [Installation - 安裝](#installation---安裝)
+    *   [Quick Example - 快速範例](#quick-example---快速範例)
+    *   [Construct - 構成式](#construct---構成式)
+        *   [method](#method)
+        *   [basic_url](#basic_url)
+        *   [end_point](#end_point)
+        *   [url_para](#url_para)
+        *   [body](#body)
+        *   [header](#header)
+        *   [token](#token)
+            *   [token_type](#token_type)
+        *   [para_type](#para_type)
+        *   [opt](#opt)
+    *   [Execute - 執行](#execute---執行)
+        *   [exe](#exe)
+    *   [Error Handle - 錯誤處理](#error-handle---錯誤處理)
+        *   [is_error](#is_error)
+        *   [is_clien_error](#is_clien_error)
+        *   [is_bad_request](#is_bad_request)
+        *   [is_unauthorized](#is_unauthorized)
+        *   [is_forbidden](#is_forbidden)
+        *   [is_method_not_allow](#is_method_not_allow)
+        *   [is_server_error](#is_server_error)
+    *   [Get Request Result - 取得請求結果](#get-request-result---取得請求結果)
+        *   [getBody](#getbody)
+        *   [getdecodeBody](#getdecodebody)
+    *   [Modelly-Best Advance Practice - 模組化-最佳進階做法](#modelly-best-advance-practice---模組化-最佳進階做法)
+        *   [Structure](#structure)
+        *   [MyApiServerApi](#myapiserverapi)
+        *   [TargetApi](#targetapi)
 
 ## Installation - 安裝
 
@@ -58,18 +72,18 @@ Same as - 如下同上
 >    'url_para' => ['page' => 1, 'page_size' => 24]
 > ])->exe();
 > ```
-Same as down below but modelly - 如下同上但模組化
+Same as above but modelly - 如下同上但模組化
 > ```php
 > use WLCURL/WLCURL;
 >
-> class MyApiServer extends WLCURL {
+> class MyApiServerApi extends WLCURL {
 >    function __construct($para) {
 >       $this->basic_url = 'https://my_api_server_url';
 >       parent::__construct($para);
 >    }
 > }
 >
-> class OrderApi extends MyApiServer {
+> class OrderApi extends MyApiServerApi {
 >    function __construct($para) {
 >       $this->end_point = '/order';
 >       parent::__construct($para);
@@ -250,12 +264,184 @@ Reach result and error handle
 
 
 ## Error Handle - 錯誤處理
-### exe
-> <font color=red>_WLCURL_</font> will do request task as soon as you call <font color=red>_exe()_</font> function, and <font color=red>_WLCURL_</font> will not do anything before you call it.
+<font color=red>_WLCURL_</font> is already prepare multiple function to help you handle your error. It only has meaning after <font color=red>_exe()_</font>
+
+### is_error
+> check curl request result return first section http status code is in <font color=blue>_4_</font> or <font color=blue>_5_</font><br>
+> Return type <font color=red>_boolean_</font>
 > ```php
-> $api = (new WLCURL) // Default GET method
->    ->basic_url('https://my_api_server_url');
->    ->end_point('/order');
->    ->url_para(['page' => 1, 'page_size' => 24]);
->    ->exe();
+> $api->is_error();
+> ```
+
+### is_clien_error
+> check curl request result return first section http status code is <font color=blue>_4_</font> or not<br>
+> Return type <font color=red>_boolean_</font>
+> ```php
+> $api->is_clien_error();
+> ```
+
+### is_bad_request
+> check curl request result return http status code is <font color=blue>_400_</font> or not<br>
+> Return type <font color=red>_boolean_</font>
+> ```php
+> $api->is_bad_request();
+> ```
+
+### is_unauthorized
+> check curl request result return http status code is <font color=blue>_401_</font> or not<br>
+> Return type <font color=red>_boolean_</font>
+> ```php
+> $api->is_unauthorized();
+> ```
+
+### is_forbidden
+> check curl request result return http status code is <font color=blue>_403_</font> or not<br>
+> Return type <font color=red>_boolean_</font>
+> ```php
+> $api->is_forbidden();
+> ```
+
+### is_method_not_allow
+> check curl request result return http status code is <font color=blue>_405_</font> or not<br>
+> Return type <font color=red>_boolean_</font>
+> ```php
+> $api->is_method_not_allow();
+> ```
+
+### is_server_error
+> check curl request result return first section http status code is <font color=blue>_5_</font> or not<br>
+> Return type <font color=red>_boolean_</font>
+> ```php
+> $api->is_server_error();
+> ```
+
+### get_Http_code
+> Retrieve rae http status code
+> ```php
+> $api->get_Http_code();
+> if ($api->get_Http_code() != 200) echo 'Do something.';
+> ```
+
+### get_error_msg
+> Retrieve the error msg from php original curl
+> ```php
+> $api->get_error_msg();
+> ```
+
+### get_info
+> Retrieve the full request info from php original curl
+> ```php
+> $api->get_info();
+> ```
+
+
+## Get Request Result - 取得請求結果
+It only has meaning after <font color=red>_exe()_</font>.
+
+### getBody
+> Get raw request result body.
+> ```php
+> $result = $api->getBody();
+> ```
+
+### getdecodeBody
+> Get request result body that after [json_decode](https://www.php.net/manual/en/function.json-decode.php).
+> ```php
+> $result = $api->getdecodeBody();
+> //Same as 
+> $result = json_decode($api->getBody());
+> //There have three option parameter to config decode result same as php json_decode()
+> $result = $api->getdecodeBody($associative = null, int $depth = 512, int $flags = 0);
+> ```
+
+You may want to handle error before retrieve body
+```php
+if ($api->is_error()) throw new \Exception('Somethong go wrong.');
+$result = $api->getBody();
+```
+
+
+## Modelly-Best Advance Practice - 模組化-最佳進階做法
+Make your own packaged curl model. 
+### Structure
+`Models`<br>
+|- MyApiServerApi (extends <font color=red>_WLCURL_</font>)<br>
+|- `Order`<br>
+|-- OrderApi (extends <font color=red>_MyApiServerApi_</font>)<br>
+|-- OrderProductApi (extends <font color=red>_MyApiServerApi_</font>)<br>
+
+### MyApiServerApi
+> Make your own target api server model class.<br>
+> You can set any solid required curl parameter in this model constructor. And you don't have to do this again.
+> ```php
+> namespace App\Models;
+> 
+> use WLCURL\WLCURL;
+> 
+> class MyApiServerApi extends WLCURL {
+>     function __construct($para) {
+>         $this->basic_url('https://my_api_server_url');
+>         $this->token('My Api Server Token.');
+>         $this->para_type('json');
+>         parent::__construct($para);
+>    }
+> }
+> ```
+
+### TargetApi
+> Make your own target end point model class. And package your api function.
+> ```php
+> namespace App\Models\Order;
+> 
+> use App\Models\MyApiServerApi;
+> 
+> class OrderApi extends MyApiServerApi {
+>     function __construct($para) {
+>         $this->end_point('/order');
+>         parent::__construct($para);
+>     }
+>     
+>     public static function index(int $page = 1, int $pae_size = 24) {
+>         return self::get([
+>             'url_para' => [
+>                 'page' => $page, 
+>                 'page_size' => $page_size
+>             ]
+>         ])->exe();
+>     }
+>
+>     public static function retrieve(int $id) {
+>         $self = self::get();
+>         $self->end_point("/$id", true); // Make end_point become /order/{id}
+>         return $self->exe();
+>     }
+>
+>     public static function create(array $body) {
+>         return self::post([
+>             'body' => $body
+>         ])->exe();
+>     }
+>
+>     public static function update(int $id, array $body) {
+>         $self = self::put();
+>         $self->end_point("/$id", true); // Make end_point become /order/{id}
+>         $self->body($body);
+>         return $self->exe();
+>     }
+> }
+> ```
+> You can use TargetApi (OrderApi) like
+> ```php
+> use App\Models\Order\OrderApi;
+> 
+> $order_index_api = OrderApi::index(1, 24);
+> $order_api = OrderApi::retrieve(1);
+> $order_api = OrderApi::create([
+>     'customer_name' => 'My customer name',
+>     'total' => 100    
+> ]);
+> $order_update_api = OrderApi::update(1, [
+>     'customer_name' => 'Changed customer name',
+>     'total' => 10    
+> ])
 > ```
