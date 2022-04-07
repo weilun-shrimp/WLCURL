@@ -38,13 +38,13 @@ Let PHP Api (CURL) request more easyly、clearly、liberty and modelly<br>
 ## Installation - 安裝
 
 ```bash
-$ composer require WLCURL/WLCURL
+$ composer require WeiLun/WLCURL
 ```
 
 ## Quick Example - 快速範例
 
 > ```php
-> use WLCURL/WLCURL;
+> use WeiLun/WLCURL;
 >
 > $order_api = new WLCURL; // Default GET method
 > $order_api->basic_url('https://my_api_server_url');
@@ -54,7 +54,7 @@ $ composer require WLCURL/WLCURL
 > ```
 Same as - 如下同上
 > ```php
-> use WLCURL/WLCURL;
+> use WeiLun/WLCURL;
 >
 > $order_api = (new WLCURL) // Default GET method
 >   ->basic_url('https://my_api_server_url');
@@ -64,7 +64,7 @@ Same as - 如下同上
 > ```
 Same as - 如下同上
 > ```php
-> use WLCURL/WLCURL;
+> use WeiLun/WLCURL;
 >
 > $order_api = WLCURL::get([
 >    'basic_url' => 'https://my_api_server_url',
@@ -74,7 +74,7 @@ Same as - 如下同上
 > ```
 Same as above but modelly - 如下同上但模組化
 > ```php
-> use WLCURL/WLCURL;
+> use WeiLun/WLCURL;
 >
 > class MyApiServerApi extends WLCURL {
 >    function __construct($para) {
@@ -404,7 +404,7 @@ Make your own packaged curl model. <br>
 > ```php
 > namespace App\Models;
 > 
-> use WLCURL\WLCURL;
+> use WeiLun\WLCURL;
 > 
 > class MyApiServerApi extends WLCURL {
 >     function __construct($para) {

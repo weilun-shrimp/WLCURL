@@ -1,6 +1,6 @@
 <?php
 
-namespace WLCURL;
+namespace WeiLun;
 
 /** 
  * @brief Let PHP Api (CURL) request more easyly、clearly and modelly, all is open source in my github, just take it, and use it well
