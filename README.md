@@ -31,7 +31,7 @@ Let PHP Api (CURL) request more easyly、clearly、liberty and modelly<br>
         *   [getBody](#getbody)
         *   [getdecodeBody](#getdecodebody)
     *   [Modelly-Best Advance Practice - 模組化-最佳進階做法](#modelly-best-advance-practice---模組化-最佳進階做法)
-        *   [Structure](#structure)
+        *   [File Structure - 檔案結構](#file-structure---檔案結構)
         *   [MyApiServerApi](#myapiserverapi)
         *   [TargetApi](#targetapi)
 
@@ -143,8 +143,8 @@ Reach result and error handle
 
 ### end_point
 >
-> <font color=red>_end_point_</font> is the second section of the url, reach your target node<br>
-> <font color=red>_end_point_</font> 是組成網址的第二個部分, 觸及你的目標節點
+> <font color=red>_end\_point_</font> is the second section of the url, reach your target node<br>
+> <font color=red>_end\_point_</font> 是組成網址的第二個部分, 觸及你的目標節點
 >
 > ```php
 > $api = WLCURL::get()->end_point('/order');
@@ -159,8 +159,8 @@ Reach result and error handle
 
 ### url_para
 >
-> <font color=red>_url_para_</font> is the third section of the url, pass your requirement parameter to api server<br>
-> <font color=red>_url_para_</font> 是組成網址的第三個部分, 傳送你所需的參數給目標 api 伺服器
+> <font color=red>_url\_para_</font> is the third section of the url, pass your requirement parameter to api server<br>
+> <font color=red>_url\_para_</font> 是組成網址的第三個部分, 傳送你所需的參數給目標 api 伺服器
 >
 > ```php
 > $api = WLCURL::get()
@@ -209,8 +209,8 @@ Reach result and error handle
 > ```
 >### token_type
 >>
->> It will put <font color=red>_token_type_</font> value in front of token as soon as build token. Defualt value is <font color=blue>_"Bearer"_</font><br>
->> 在組建token參數時, 會將<font color=red>_token_type_</font>值擺在前面
+>> It will put <font color=red>_token\_type_</font> value in front of token as soon as build token. Defualt value is <font color=blue>_"Bearer"_</font><br>
+>> 在組建token參數時, 會將<font color=red>_token\_type_</font>值擺在前面
 >> 
 >> ```php
 >> $api = WLCURL::get()->token_type('Bearer');
@@ -240,7 +240,8 @@ Reach result and error handle
 
 ### opt
 >
-> Set curl opt parameter, you can find referance in [PHP CURL setopt](https://www.php.net/manual/en/function.curl-setopt.php)
+> Set PHP original curl opt parameter, you can find referance in [PHP CURL setopt](https://www.php.net/manual/en/function.curl-setopt.php)<br>
+> 設置PHP原生curl opt參數, 你可以參照此處[PHP CURL setopt](https://www.php.net/manual/en/function.curl-setopt.php)
 > ```php
 > $api = WLCURL::get()->opt(CURLOPT_RETURNTRANSFER, true); // Add parameter
 > // Same as
@@ -253,7 +254,8 @@ Reach result and error handle
 
 ## Execute - 執行
 ### exe
-> <font color=red>_WLCURL_</font> will do request task as soon as you call <font color=red>_exe()_</font> function, and <font color=red>_WLCURL_</font> will not do anything before you call it.
+> <font color=red>_WLCURL_</font> will do request task as soon as you call <font color=red>_exe()_</font> function, and <font color=red>_WLCURL_</font> will not do anything before you call it.<br>
+> <font color=red>_WLCURL_</font> 會在執行 <font color=red>_exe()_</font> 函式時執行請求任務. <font color=red>_WLCURL_</font> 不會在你呼叫此函式前做任何事.
 > ```php
 > $api = (new WLCURL) // Default GET method
 >    ->basic_url('https://my_api_server_url');
@@ -264,59 +266,76 @@ Reach result and error handle
 
 
 ## Error Handle - 錯誤處理
-<font color=red>_WLCURL_</font> is already prepare multiple function to help you handle your error. It only has meaning after <font color=red>_exe()_</font>
+<font color=red>_WLCURL_</font> is already prepare multiple function to help you handle your error. It only has meaning after <font color=red>_exe()_</font><br>
+
+<font color=red>_WLCURL_</font> 已經準備好許多函式來幫助你處理錯誤狀況. 這只會在執行 <font color=red>_exe()_</font> 後有意義
 
 ### is_error
 > check curl request result return first section http status code is in <font color=blue>_4_</font> or <font color=blue>_5_</font><br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼第一字節是否是 <font color=blue>_4_</font> 或 <font color=blue>_5_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_error();
 > ```
 
 ### is_clien_error
 > check curl request result return first section http status code is <font color=blue>_4_</font> or not<br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼第一字節是否是 <font color=blue>_4_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_clien_error();
 > ```
 
 ### is_bad_request
 > check curl request result return http status code is <font color=blue>_400_</font> or not<br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼是否是 <font color=blue>_400_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_bad_request();
 > ```
 
 ### is_unauthorized
 > check curl request result return http status code is <font color=blue>_401_</font> or not<br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼是否是 <font color=blue>_401_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_unauthorized();
 > ```
 
 ### is_forbidden
 > check curl request result return http status code is <font color=blue>_403_</font> or not<br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼是否是 <font color=blue>_403_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_forbidden();
 > ```
 
 ### is_method_not_allow
 > check curl request result return http status code is <font color=blue>_405_</font> or not<br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼是否是 <font color=blue>_405_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_method_not_allow();
 > ```
 
 ### is_server_error
 > check curl request result return first section http status code is <font color=blue>_5_</font> or not<br>
-> Return type <font color=red>_boolean_</font>
+> Return type <font color=red>_boolean_</font><br>
+> 檢查curl請求結果回傳的http狀態碼第一字節是否是 <font color=blue>_5_</font><br>
+> 回傳型態 <font color=red>_boolean_</font>
 > ```php
 > $api->is_server_error();
 > ```
 
 ### get_Http_code
-> Retrieve rae http status code
+> Retrieve raw http status code
+> 取得原生http回傳之狀態碼
 > ```php
 > $api->get_Http_code();
 > if ($api->get_Http_code() != 200) echo 'Do something.';
@@ -324,28 +343,33 @@ Reach result and error handle
 
 ### get_error_msg
 > Retrieve the error msg from php original curl
+> 取得PHP原生curl請求錯誤的錯誤訊息
 > ```php
 > $api->get_error_msg();
 > ```
 
 ### get_info
-> Retrieve the full request info from php original curl
+> Retrieve full request info from PHP original curl
+> 取得所有PHP原生curl請求的回傳訊息
 > ```php
 > $api->get_info();
 > ```
 
 
 ## Get Request Result - 取得請求結果
-It only has meaning after <font color=red>_exe()_</font>.
+It only has meaning after <font color=red>_exe()_</font>.<br>
+只有在呼叫<font color=red>_exe()_</font>函式後有意義.
 
 ### getBody
-> Get raw request result body.
+> Get raw request result body.<br>
+> 取得原始請求後的body結果.
 > ```php
 > $result = $api->getBody();
 > ```
 
 ### getdecodeBody
-> Get request result body that after [json_decode](https://www.php.net/manual/en/function.json-decode.php).
+> Get request result body that after [json_decode](https://www.php.net/manual/en/function.json-decode.php).<br>
+> 取得請求後的 [json_decode](https://www.php.net/manual/en/function.json-decode.php) body結果.
 > ```php
 > $result = $api->getdecodeBody();
 > //Same as 
@@ -354,7 +378,8 @@ It only has meaning after <font color=red>_exe()_</font>.
 > $result = $api->getdecodeBody($associative = null, int $depth = 512, int $flags = 0);
 > ```
 
-You may want to handle error before retrieve body
+You may want to handle error before retrieve body<br>
+你也許會想要在取得結果前做錯誤處理
 ```php
 if ($api->is_error()) throw new \Exception('Somethong go wrong.');
 $result = $api->getBody();
@@ -362,8 +387,9 @@ $result = $api->getBody();
 
 
 ## Modelly-Best Advance Practice - 模組化-最佳進階做法
-Make your own packaged curl model. 
-### Structure
+Make your own packaged curl model. <br>
+製作屬於你自己的curl請求模組類別
+### File Structure - 檔案結構
 `Models`<br>
 |- MyApiServerApi (extends <font color=red>_WLCURL_</font>)<br>
 |- `Order`<br>
@@ -372,7 +398,9 @@ Make your own packaged curl model.
 
 ### MyApiServerApi
 > Make your own target api server model class.<br>
-> You can set any solid required curl parameter in this model constructor. And you don't have to do this again.
+> You can set any solid required curl parameter in this model constructor. And you don't have to do this again.<br>
+> 製作你自己的目標api請求模組類別.<br>
+> 你可以設置任何請求前所需的目標參數在構成式裡, 你將不需要再做一次.<br>
 > ```php
 > namespace App\Models;
 > 
@@ -389,7 +417,8 @@ Make your own packaged curl model.
 > ```
 
 ### TargetApi
-> Make your own target end point model class. And package your api function.
+> Make your own target end point model class. And package your api function.<br>
+> 製作你自己的目標節點請求api模組類別. 並打包函式方便日後使用.
 > ```php
 > namespace App\Models\Order;
 > 
@@ -430,7 +459,8 @@ Make your own packaged curl model.
 >     }
 > }
 > ```
-> You can use TargetApi (OrderApi) like
+> You can use TargetApi (OrderApi) like<br>
+> 你可以使用 TargetApi (OrderApi) 就像
 > ```php
 > use App\Models\Order\OrderApi;
 > 
