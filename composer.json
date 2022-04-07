@@ -11,7 +11,7 @@
         }
     ],
     "homepage": "https://github.com/weilun-shrimp/WLCURL",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=7.3"
     },
