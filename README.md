@@ -38,7 +38,7 @@ Let PHP Api (CURL) request more easyly、clearly、liberty and modelly<br>
 ## Installation - 安裝
 
 ```bash
-$ composer require WeiLun/WLCURL
+$ composer require weilun/wlcurl
 ```
 
 ## Quick Example - 快速範例
