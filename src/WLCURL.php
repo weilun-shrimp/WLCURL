@@ -2,9 +2,9 @@
 
 namespace WeiLun;
 
-/** 
+/**
  * @brief Let PHP Api (CURL) request more easyly、clearly and modelly, all is open source in my github, just take it, and use it well
- * 
+ *
  * @source https://github.com/weilun-shrimp/WLCURL
  * @author WeiLun
  * @date 2021-07-06
@@ -67,9 +67,6 @@ class WLCURL
 
     public function __construct(array $multiple_para = [])
     {
-        if (!empty(env('WLCURL_BASE_URL'))) $this->base_url = env('WLCURL_BASE_URL');
-        if (!empty(env('WLCURL_DEFULT_TOKEN_TYPE'))) $this->token_type = env('WLCURL_DEFULT_TOKEN_TYPE');
-        if (!empty(env('WLCURL_DEFULT_TOKEN'))) $this->token = env('WLCURL_DEFULT_TOKEN');
         if ($multiple_para) $this->build_multiple_para($multiple_para);
     }
 
@@ -112,7 +109,7 @@ class WLCURL
         }
     }
 
-    protected function chaeck_encode()
+    protected function check_encode()
     {
         try {
             if (!is_numeric($this->encode_depth)) {
@@ -181,7 +178,7 @@ class WLCURL
     }
 
     /**
-     * referance : 
+     * referance :
      *      https://www.php.net/manual/en/function.curl-setopt.php
      *      https://www.php.net/manual/en/function.curl-setopt-array.php
      */
@@ -252,7 +249,7 @@ class WLCURL
     /**
      * Because some frame work has uniqe rule to format api request url
      * example : Django -> if request method is post , every endpoint end need add "/"
-     * if use this method will cause error, so I command this method 
+     * if use this method will cause error, so I command this method
      */
     // public function end_point(...$end_point)
     // {
@@ -314,7 +311,7 @@ class WLCURL
     {
         $this->encode_flag = $flag;
         $this->encode_depth = $depth;
-        $this->chaeck_encode();
+        $this->check_encode();
         return $this;
     }
 
@@ -428,7 +425,7 @@ class WLCURL
      *          ],
      *          'header' => [
      *              'Content-Type' => 'application/json',
-     *              'Authorization' => 'Your token here',       
+     *              'Authorization' => 'Your token here',
      *          ]
      *      ])->exe();
      */
@@ -481,7 +478,7 @@ class WLCURL
 
 
     /**
-     * after exe 
+     * after exe
      */
     public function getBody()
     {
@@ -504,42 +501,42 @@ class WLCURL
      *   accept target para
      *   -------------------
      *      url
-     *      content_type 
-     *      http_code 
-     *      header_size 
-     *      request_size 
-     *      filetime 
-     *      ssl_verify_result 
-     *      redirect_count 
-     *      total_time 
-     *      namelookup_time 
-     *      connect_time 
-     *      pretransfer_time 
-     *      size_upload 
-     *      size_download 
-     *      speed_download 
-     *      speed_upload 
-     *      download_content_length 
-     *      upload_content_length 
-     *      starttransfer_time 
-     *      redirect_time 
-     *      redirect_url 
-     *      primary_ip 
-     *      certinfo 
-     *      primary_port 
-     *      local_ip 
-     *      local_port 
-     *      http_version 
-     *      protocol 
-     *      ssl_verifyresult 
-     *      scheme 
-     *      appconnect_time_us 
-     *      connect_time_us 
-     *      namelookup_time_us 
-     *      pretransfer_time_us 
-     *      redirect_time_us 
-     *      starttransfer_time_us 
-     *      total_time_us 
+     *      content_type
+     *      http_code
+     *      header_size
+     *      request_size
+     *      filetime
+     *      ssl_verify_result
+     *      redirect_count
+     *      total_time
+     *      namelookup_time
+     *      connect_time
+     *      pretransfer_time
+     *      size_upload
+     *      size_download
+     *      speed_download
+     *      speed_upload
+     *      download_content_length
+     *      upload_content_length
+     *      starttransfer_time
+     *      redirect_time
+     *      redirect_url
+     *      primary_ip
+     *      certinfo
+     *      primary_port
+     *      local_ip
+     *      local_port
+     *      http_version
+     *      protocol
+     *      ssl_verifyresult
+     *      scheme
+     *      appconnect_time_us
+     *      connect_time_us
+     *      namelookup_time_us
+     *      pretransfer_time_us
+     *      redirect_time_us
+     *      starttransfer_time_us
+     *      total_time_us
      */
     public function get_info($target = null)
     {

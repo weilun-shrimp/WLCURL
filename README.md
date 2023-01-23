@@ -8,7 +8,7 @@ Let PHP Api (CURL) request more easyly、clearly、liberty and modelly<br>
     *   [Quick Example - 快速範例](#quick-example---快速範例)
     *   [Construct - 構成式](#construct---構成式)
         *   [method](#method)
-        *   [basic_url](#basic_url)
+        *   [base_url](#base_url)
         *   [end_point](#end_point)
         *   [url_para](#url_para)
         *   [body](#body)
@@ -47,7 +47,7 @@ $ composer require weilun/wlcurl
 > use WeiLun/WLCURL;
 >
 > $order_api = new WLCURL; // Default GET method
-> $order_api->basic_url('https://my_api_server_url');
+> $order_api->base_url('https://my_api_server_url');
 > $order_api->end_point('/order');
 > $order_api->url_para(['page' => 1, 'page_size' => 24]);
 > $order_api->exe();
@@ -57,7 +57,7 @@ Same as - 如下同上
 > use WeiLun/WLCURL;
 >
 > $order_api = (new WLCURL) // Default GET method
->   ->basic_url('https://my_api_server_url');
+>   ->base_url('https://my_api_server_url');
 >   ->end_point('/order');
 >   ->url_para(['page' => 1, 'page_size' => 24]);
 >   ->exe();
@@ -67,7 +67,7 @@ Same as - 如下同上
 > use WeiLun/WLCURL;
 >
 > $order_api = WLCURL::get([
->    'basic_url' => 'https://my_api_server_url',
+>    'base_url' => 'https://my_api_server_url',
 >    'end_point' => '/order',
 >    'url_para' => ['page' => 1, 'page_size' => 24]
 > ])->exe();
@@ -78,7 +78,7 @@ Same as above but modelly - 如下同上但模組化
 >
 > class MyApiServerApi extends WLCURL {
 >    function __construct($para) {
->       $this->basic_url = 'https://my_api_server_url';
+>       $this->base_url = 'https://my_api_server_url';
 >       parent::__construct($para);
 >    }
 > }
@@ -127,18 +127,18 @@ Reach result and error handle
 >> $api = new WLCURL;
 >> $api->method = 'My custom method';
 >> // Same as above
->> $api = new WLCURL(['method' => 'My custom method']); 
->> $api = WLCURL::request('My custom method', array $my_construct_para = []); 
->> 
+>> $api = new WLCURL(['method' => 'My custom method']);
+>> $api = WLCURL::request('My custom method', array $my_construct_para = []);
+>>
 >> ```
 
-### basic_url
+### base_url
 >
 > As we all knows, URL is the most important foundation of the CURL request. And <font color=red>_basic url_</font> is the first section of the url<br>
 > 眾所周知, 網址是 curl 請求最重要的一環, 而 <font color=red>_basic url_</font> 是組成網址的第一個部分
 >
 > ```php
-> $api = WLCURL::get()->basic_url('https://my_api_server_url');
+> $api = WLCURL::get()->base_url('https://my_api_server_url');
 > ```
 
 ### end_point
@@ -168,7 +168,7 @@ Reach result and error handle
 >   ->url_para('page_size', 24);
 > // Same as
 > $api = WLCURL::get()->url_para([
->    'page' => 1, 
+>    'page' => 1,
 >    'page_size' => 24
 > ]);
 > ```
@@ -186,7 +186,7 @@ Reach result and error handle
 >   ->body('content', 'My content');
 > // Same as
 > $api = WLCURL::post()->body([ // Replace whole body structure
->    'title' => 'My title', 
+>    'title' => 'My title',
 >    'content' => 'My content'
 > ]);
 > ```
@@ -211,28 +211,28 @@ Reach result and error handle
 >>
 >> It will put <font color=red>_token\_type_</font> value in front of token as soon as build token. Defualt value is <font color=blue>_"Bearer"_</font><br>
 >> 在組建token參數時, 會將<font color=red>_token\_type_</font>值擺在前面
->> 
+>>
 >> ```php
 >> $api = WLCURL::get()->token_type('Bearer');
 >> ```
-> <br> If you want to set token manually 
-> <br> 如果你想手動設置token 
+> <br> If you want to set token manually
+> <br> 如果你想手動設置token
 > ```php
 > $api = WLCURL::get()->header('Authorization', 'My token type' . 'My token');
 > ```
 
 ### para_type
-> It will effect the <font color=red>_body_</font> parameter formation as soon as build curl request.<br> 
-> The default value is <font color=blue>"_http_"</font>.<br> 
+> It will effect the <font color=red>_body_</font> parameter formation as soon as build curl request.<br>
+> The default value is <font color=blue>"_http_"</font>.<br>
 > The value only accept in <font color=blue>_["http", "json"]_</font>.<br>
 > If value equal <font color=blue>_"http"_</font>, <font color=red>_WLCURL_</font> will format <font color=red>_body_</font> as [build_http_query_para](https://www.php.net/manual/en/function.http-build-query.php). <br>
 > If value equal <font color=blue>_"json"_</font>, <font color=red>_WLCURL_</font> will format <font color=red>_body_</font> as [json_encode](https://www.php.net/manual/en/function.json-encode.php), and set curl header Content-Type as <font color=blue>_"application/json"_</font> automatically. <br>
 > 此參數會直接影響curl請求時<font color=red>_body_</font>參數轉換的形式<br>
-> 預設值是<font color=blue>"_http_"</font>.<br> 
+> 預設值是<font color=blue>"_http_"</font>.<br>
 > 參數容許值只在<font color=blue>_["http", "json"]_</font>裡面.<br>
 > 如果參數設為<font color=blue>_"http"_</font>, <font color=red>_WLCURL_</font> 會將 <font color=red>_body_</font>參數設為 [build_http_query_para](https://www.php.net/manual/en/function.http-build-query.php). <br>
 > 如果參數設為<font color=blue>_"json"_</font>, <font color=red>_WLCURL_</font> 會將 <font color=red>_body_</font>參數設為 [json_encode](https://www.php.net/manual/en/function.json-encode.php), 並且會自動將curl header Content-Type參數設為 <font color=blue>_"application/json"_</font><br>
-> 
+>
 > ```php
 > $api = WLCURL::get()->para_type('json');
 >    //->header('Content-Type', 'application/json'); If value is "json", WLCURL will set this automatically
@@ -258,7 +258,7 @@ Reach result and error handle
 > <font color=red>_WLCURL_</font> 會在執行 <font color=red>_exe()_</font> 函式時執行請求任務. <font color=red>_WLCURL_</font> 不會在你呼叫此函式前做任何事.
 > ```php
 > $api = (new WLCURL) // Default GET method
->    ->basic_url('https://my_api_server_url');
+>    ->base_url('https://my_api_server_url');
 >    ->end_point('/order');
 >    ->url_para(['page' => 1, 'page_size' => 24]);
 >    ->exe();
@@ -372,7 +372,7 @@ It only has meaning after <font color=red>_exe()_</font>.<br>
 > 取得請求後的 [json_decode](https://www.php.net/manual/en/function.json-decode.php) body結果.
 > ```php
 > $result = $api->getdecodeBody();
-> //Same as 
+> //Same as
 > $result = json_decode($api->getBody());
 > //There have three option parameter to config decode result same as php json_decode()
 > $result = $api->getdecodeBody($associative = null, int $depth = 512, int $flags = 0);
@@ -403,12 +403,12 @@ Make your own packaged curl model. <br>
 > 你可以設置任何請求前所需的目標參數在構成式裡, 你將不需要再做一次.<br>
 > ```php
 > namespace App\Models;
-> 
+>
 > use WeiLun\WLCURL;
-> 
+>
 > class MyApiServerApi extends WLCURL {
 >     function __construct($para) {
->         $this->basic_url('https://my_api_server_url');
+>         $this->base_url('https://my_api_server_url');
 >         $this->token('My Api Server Token.');
 >         $this->para_type('json');
 >         parent::__construct($para);
@@ -421,19 +421,19 @@ Make your own packaged curl model. <br>
 > 製作你自己的目標節點請求api模組類別. 並打包函式方便日後使用.
 > ```php
 > namespace App\Models\Order;
-> 
+>
 > use App\Models\MyApiServerApi;
-> 
+>
 > class OrderApi extends MyApiServerApi {
 >     function __construct($para) {
 >         $this->end_point('/order');
 >         parent::__construct($para);
 >     }
->     
+>
 >     public static function index(int $page = 1, int $pae_size = 24) {
 >         return self::get([
 >             'url_para' => [
->                 'page' => $page, 
+>                 'page' => $page,
 >                 'page_size' => $page_size
 >             ]
 >         ])->exe();
@@ -463,15 +463,15 @@ Make your own packaged curl model. <br>
 > 你可以使用 TargetApi (OrderApi) 就像
 > ```php
 > use App\Models\Order\OrderApi;
-> 
+>
 > $order_index_api = OrderApi::index(1, 24);
 > $order_api = OrderApi::retrieve(1);
 > $order_api = OrderApi::create([
 >     'customer_name' => 'My customer name',
->     'total' => 100    
+>     'total' => 100
 > ]);
 > $order_update_api = OrderApi::update(1, [
 >     'customer_name' => 'Changed customer name',
->     'total' => 10    
+>     'total' => 10
 > ])
 > ```
