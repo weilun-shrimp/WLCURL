@@ -218,7 +218,7 @@ class WLCURL
 
     protected function build_token()
     {
-        return !$this->token ?? $this->header('Authorization', $this->token_type . ' ' . $this->token);
+        if ($this->token) $this->header('Authorization', $this->token_type . ' ' . $this->token);
     }
 
     protected function check_end_point()
