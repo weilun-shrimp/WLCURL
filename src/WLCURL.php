@@ -577,7 +577,7 @@ class WLCURL
     /**
      *  clien error
      */
-    public function is_clien_error()
+    public function is_client_error()
     {
         $this->check_http_code(__FUNCTION__);
         return substr($this->info['http_code'], 0, 1) == 4 ? true : false;
