@@ -38,8 +38,29 @@ class Request
         }
     }
 
-    protected function body()
+    protected function query()
     {
-        $this->body = $this->curl->body;
+        $result = [];
+        foreach ($this->curl->queries as $k => $v) {
+            if (is_array($v)) {
+                $result[] = $k . $this->tailQuery($v);
+                continue;
+            }
+            $result[] = "$k=$v";
+        }
+        $this->query = implode('&', $result);
+    }
+
+    protected function tailQuery(array $tailQuery): array
+    {
+        $result = [];
+        foreach ($tailQuery as $k => $v) {
+            if (is_array($v)) {
+                $result[] = "[$k]" . $this->tailQuery($v);
+                continue;
+            }
+            $result[] = "[$k]=$v";
+        }
+        return $result;
     }
 }

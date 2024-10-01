@@ -25,7 +25,6 @@ class Curl
 
     public Request $request;
 
-
     public static function __callStatic(string $name, array $arguments)
     {
         switch ($name) {
