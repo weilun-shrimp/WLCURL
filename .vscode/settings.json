@@ -1,0 +1,7 @@
+{
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+    "editor.formatOnSave": true,
+    "intelephense.environment.phpVersion": "8.3"
+}
+
+

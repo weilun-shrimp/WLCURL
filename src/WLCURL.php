@@ -3,7 +3,7 @@
 namespace WeiLun;
 
 /**
- * @brief Let PHP Api (CURL) request more easyly、clearly and modelly, all is open source in my github, just take it, and use it well
+ * @brief Make PHP API (cURL) requests easier, clearer, and more modular. Everything is open source on my GitHub—just take it and use it well.
  *
  * @source https://github.com/weilun-shrimp/WLCURL
  * @author WeiLun
