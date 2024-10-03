@@ -1,6 +1,6 @@
 <?php
 
-namespace WeiLun;
+namespace WeiLun\WLCURL;
 
 /**
  * @brief Make PHP API (cURL) requests easier, clearer, and more modular. Everything is open source on my GitHub—just take it and use it well.
