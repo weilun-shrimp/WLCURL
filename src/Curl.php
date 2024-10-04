@@ -10,7 +10,7 @@ class Curl
     public string $user = '';
     public string $pass = '';
     public string $host = '';
-    public int $port = 80;
+    public int $port = 0;
     public string $path = '';
     public string $fragment = '';
     public array $queries = [];
@@ -47,6 +47,10 @@ class Curl
     public function url(string $url)
     {
         $decodeUrl = parse_url($url);
+        if (!$decodeUrl) throw new \Exception('
+            Invalid $url argument value be found in ' . static::class . '::' . __FUNCTION__ . '(). 
+            The invalid $url => ' . $url . '
+        ');
 
         foreach (['scheme', 'host', 'port', 'user', 'pass', 'path', 'fragment'] as $v) {
             if (isset($decodeUrl[$v]))
