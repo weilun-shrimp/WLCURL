@@ -19,5 +19,14 @@
         "psr-4": {
             "WeiLun\\WLCURL\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WeiLun\\WLCURL\\": "src/",
+            "Weilun\\WLCURL\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "11.3"
     }
 }

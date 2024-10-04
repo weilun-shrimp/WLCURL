@@ -1,6 +1,10 @@
 <?php
 
 
-$result = parse_url('sftp://user:password@my_server.com/path/to/file.txt?test=test');
+$result = parse_url('h://my_server.com#eee');
 
 var_dump($result);
+
+parse_str('test=test', $query);
+
+var_dump($query);
