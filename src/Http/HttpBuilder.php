@@ -1,11 +1,12 @@
 <?php
 
-namespace Weilun\WLCURL;
+namespace Weilun\WLCURL\Http;
 
-use WeiLun\WLCURL\Curl;
+use WeiLun\WLCURL\Builder;
 
-class HttpCurl extends Curl
+class HttpBuilder extends Builder
 {
+    public string $scheme = 'http';
     public string $method = 'GET';
     public array $body = [];
     /**
@@ -67,9 +68,10 @@ class HttpCurl extends Curl
 
     public function __get(string $name)
     {
+        if ($parentValue = parent::__get($name))
+            return $parentValue;
         switch ($name) {
             case 'headers':
-            case 'opts':
                 return $this->{"_$name"};
                 break;
             default:
@@ -79,14 +81,29 @@ class HttpCurl extends Curl
 
     public function __set(string $name, mixed $argument)
     {
+        parent::__set($name, $argument);
         switch ($name) {
             case 'headers':
-            case 'opts':
                 if (!is_array($argument))
                     throw new \Exception("The $name parameter of " . static::class . 'is required to be an array.');
                 $this->{$name}($argument);
                 break;
         }
+    }
+
+    /**
+     * @param string $scheme - Only accept in 'http' or 'https'
+     * @throws \Exception
+     */
+    public function scheme(string $scheme)
+    {
+        if ($scheme !== 'http' and $scheme !== 'https')
+            throw new \Exception('
+                Unsupport $scheme argument be found in ' . static::class . '::' . __FUNCTION__ . '(). 
+                Only accept in \'http\' or \'https\'.
+            ');
+        $this->scheme = $scheme;
+        return $this;
     }
 
     public function method(string $method)
@@ -131,7 +148,7 @@ class HttpCurl extends Curl
             case 'replace':
                 $this->_headers = $headers;
                 break;
-            case 'replace':
+            case 'add':
                 // Do nothing. Becuase it is already inserted on the top of section.
                 break;
             default:
@@ -169,5 +186,24 @@ class HttpCurl extends Curl
                 ');
         }
         return $this;
+    }
+
+    public function buildHeader(): array
+    {
+        return [];
+    }
+
+    public function buildOpts(): array
+    {
+        // $selfOpts = $this->_opts;
+        // $selfOpts[CURLOPT_CUSTOMREQUEST] = $this->method;
+        $parentOpts = parent::buildOpts();
+
+        return $parentOpts +
+            $this->_opts +
+            [
+                CURLOPT_CUSTOMREQUEST => $this->method,
+                CURLOPT_HTTPHEADER => $this->buildHeader()
+            ];
     }
 }
